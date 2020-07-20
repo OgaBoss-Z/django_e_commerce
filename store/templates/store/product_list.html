@@ -1,0 +1,120 @@
+{% extends 'store/main.html' %}
+{% load static %}
+
+
+{% block content %}
+
+   <div class="banner banner-cat" style="background-image: url('assets/images/banners/banner-top.jpg');">
+       <div class="banner-content container">
+           <h2 class="banner-subtitle">check out over <span>200+</span></h2>
+           <h1 class="banner-title">
+               INCREDIBLE deals
+           </h1>
+           <a href="#" class="btn btn-dark">Shop Now</a>
+       </div><!-- End .banner-content -->
+   </div><!-- End .banner -->
+
+   <nav aria-label="breadcrumb" class="breadcrumb-nav">
+       <div class="container">
+           <ol class="breadcrumb">
+               <li class="breadcrumb-item"><a href="{% url 'home-page' %}"><i class="icon-home"></i></a></li>
+               <li class="breadcrumb-item"><a href="#">Electronics</a></li>
+               <li class="breadcrumb-item active" aria-current="page">Headsets</li>
+           </ol>
+       </div><!-- End .container -->
+   </nav>
+
+   <div class="container">
+       <nav class="toolbox">
+           <div class="toolbox-left">
+               <div class="toolbox-item toolbox-sort">
+                   <div class="select-custom">
+                       <select name="orderby" class="form-control">
+                           <option value="menu_order" selected="selected">Default sorting</option>
+                           <option value="popularity">Sort by popularity</option>
+                           <option value="rating">Sort by average rating</option>
+                           <option value="date">Sort by newness</option>
+                           <option value="price">Sort by price: low to high</option>
+                           <option value="price-desc">Sort by price: high to low</option>
+                       </select>
+                   </div><!-- End .select-custom -->
+
+                   <a href="#" class="sorter-btn" title="Set Ascending Direction"><span class="sr-only">Set Ascending Direction</span></a>
+               </div><!-- End .toolbox-item -->
+           </div><!-- End .toolbox-left -->
+
+           <div class="toolbox-item toolbox-show">
+                   <label>Showing 1–9 of 60 results</label>
+               </div><!-- End .toolbox-item -->
+
+           <div class="layout-modes">
+               <a href="category.html" class="layout-btn btn-grid active" title="Grid">
+                   <i class="icon-mode-grid"></i>
+               </a>
+               <a href="category-list.html" class="layout-btn btn-list" title="List">
+                   <i class="icon-mode-list"></i>
+               </a>
+           </div><!-- End .layout-modes -->
+       </nav>
+                   
+               <div class="row row-sm">
+                {% for item in products %}
+                   <div class="col-6 col-md-4 col-xl-2">
+                       <div class="product-default">
+                           <figure>
+                               <a href="{{ item.get_absolute_url }}">
+                                   <img src="{{item.display_img.url}}">
+                               </a>
+                           </figure>
+                           <div class="product-details">
+                               <div class="ratings-container">
+                                   <div class="product-ratings">
+                                       <span class="ratings" style="width:100%"></span><!-- End .ratings -->
+                                       <span class="tooltiptext tooltip-top"></span>
+                                   </div><!-- End .product-ratings -->
+                               </div><!-- End .product-container -->
+                               <h2 class="product-title">
+                                   <a href="{{ item.get_absolute_url }}">{{item.name|linebreaks|truncatechars:28}}</a>
+                               </h2>
+                               <div class="price-box">
+                                {% if item.discount_price %}
+                                   <span class="old-price">₹ {{item.price}}</span>
+                                   <span class="product-price">₹ {{item.discount_price}}</span>
+                                {% else %}
+                                   <span class="product-price">₹ {{item.price}}</span>
+                                {% endif %}
+                             </div><!-- End .price-box -->
+                               <div class="product-action">
+                                   <button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal"><i class="icon-bag"></i>ADD TO CART</button> 
+                               </div>
+                           </div><!-- End .product-details -->
+                       </div>
+                   </div>
+                {% endfor %}
+               </div>
+
+       <nav class="toolbox toolbox-pagination">
+           <div class="toolbox-item toolbox-show">
+               <label>Showing 1–9 of 60 results</label>
+           </div><!-- End .toolbox-item -->
+
+           <ul class="pagination">
+               <li class="page-item disabled">
+                   <a class="page-link page-link-btn" href="#"><i class="icon-angle-left"></i></a>
+               </li>
+               <li class="page-item active">
+                   <a class="page-link" href="#">1 <span class="sr-only">(current)</span></a>
+               </li>
+               <li class="page-item"><a class="page-link" href="#">2</a></li>
+               <li class="page-item"><a class="page-link" href="#">3</a></li>
+               <li class="page-item"><a class="page-link" href="#">4</a></li>
+               <li class="page-item"><span>...</span></li>
+               <li class="page-item"><a class="page-link" href="#">15</a></li>
+               <li class="page-item">
+                   <a class="page-link page-link-btn" href="#"><i class="icon-angle-right"></i></a>
+               </li>
+           </ul>
+       </nav>
+   </div><!-- End .container -->
+
+{% endblock %}

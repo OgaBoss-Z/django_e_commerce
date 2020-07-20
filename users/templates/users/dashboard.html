@@ -1,0 +1,147 @@
+{% extends 'store/main.html' %}
+
+{% block content %}
+
+   <main class="main">
+      <nav aria-label="breadcrumb" class="breadcrumb-nav">
+         <div class="container">
+            <ol class="breadcrumb">
+               <li class="breadcrumb-item"><a href="{% url 'home-page' %}"><i class="icon-home"></i></a></li>
+               <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+            </ol>
+         </div><!-- End .container -->
+      </nav>
+
+      <div class="container">
+         <div class="row">
+            <div class="col-lg-9 order-lg-last dashboard-content">
+                  <h2>My Dashboard (@{{user.username}})</h2>
+
+                  <h3>Account Information</h3>
+
+                  <div class="row">
+                     <div class="col-md-6">
+                        <div class="card">
+                              <div class="card-header">
+                                 Profile Information
+                              </div><!-- End .card-header -->
+
+                              <div class="card-body">
+                                 <img class="dashboard-img" src="{{user.profile.image.url}}" alt="User Image">
+                                 <p class="dashboard-p">
+                                    Name: {{user.first_name}} {{user.last_name}}<br>
+                                    Email: {{user.email}}<br>
+                                    Phone: {{user.profile.phone}} <br>
+                                    Date Joined: {{user.date_joined}}
+                                 </p>
+                              </div><!-- End .card-body -->
+                        </div><!-- End .card -->
+                     </div><!-- End .col-md-6 -->
+
+                     <div class="col-md-6">
+                        <div class="card">
+                              <div class="card-header">
+                                 Address
+                              </div><!-- End .card-header -->
+
+                              <div class="card-body">
+                                 <p class="dashboard-p">
+                                    {{user.profile.address}},
+                                    {{user.profile.house_number}}, <br>
+                                    {{user.profile.city}},
+                                    {{user.profile.state}} <br>
+                                    Zip/Postal Code: {{user.profile.zip_code}}
+                                 </p>
+                              </div><!-- End .card-body -->
+                        </div><!-- End .card -->
+                        
+                     </div><!-- End .col-md-6 -->
+                  </div><!-- End .row -->
+
+                  <div class="card">
+                     <div class="card-header">
+                        My Orders
+                     </div><!-- End .card-header -->
+
+                        <div class="card-body">
+                           <div class="cart-table-container">
+                              <table class="table table-cart">
+                                 <thead>
+                                    <tr>
+                                       <th class="product-col">Ref Code</th>
+                                       <th class="price-col">Ordered date</th>
+                                       <th class="qty-col">Delivery Address</th>
+                                       <th>Amount Payed (₹)</th>
+                                       <th></th>
+                                    </tr>
+                                 </thead>
+                                 
+                                 <tbody>
+                                    {% for order_item in user_orders %}
+                                       {% if order_item.ordered %}
+                                          <tr class="product-row">
+                                             <td class="product-col">
+                                                <h2 class="product-title">
+                                                   {{order_item.ref_code}}
+                                                </h2>
+                                             </td>
+                                             <td>
+                                                {{order_item.ordered_date}}
+                                             </td>
+                                             <td>
+                                                {{order_item.shipping_address.street_address}},
+                                                {{order_item.shipping_address.apartment_address}}
+                                             </td>
+                                             <td>
+                                                {{order_item.get_total}}
+                                             </td>
+                                             
+                                          </tr>
+                                       {% endif %}
+                                    {% endfor %}
+                                 </tbody>
+         
+                                 
+                              </table>
+                           </div><!-- End .cart-table-container -->
+                        </div><!-- End .card-body -->
+
+                  </div><!-- End .card -->
+            </div><!-- End .col-lg-9 -->
+
+            <aside class="sidebar col-lg-3">
+                  <div class="widget widget-dashboard">
+                     <h3 class="widget-title">My Account</h3>
+
+                     <ul class="list">
+                        <li class="active"><a href="{% url 'dashboard' %}">Account Information</a></li>
+                        <li><a href="{% url 'user-orders' %}">My Orders</a></li>
+                        <li><a href="{% url 'refund-page' %}">Request a Refund</a></li>
+                        <li><a href="{% url 'dashboard-update' %}">Update Profile</a></li>
+                        <li><a href="{% url 'logout-page' %}">Logout</a></li>
+                     </ul>
+                  </div><!-- End .widget -->
+
+                  <div class="card">
+                     <div class="card-header">
+                        Account 
+                     </div><!-- End .card-header -->
+
+                     <div class="card-body">
+                        <div class="row">
+                           <p class="dashboard-p">
+                              Username: {{user.username}}<br>
+                              Last Login: {{user.last_login}} <br>
+                              Date Joined: {{user.date_joined.date}}
+                           </p>
+                        </div>
+                     </div><!-- End .card-body -->
+                  </div><!-- End .card -->
+            </aside><!-- End .col-lg-3 -->
+         </div><!-- End .row -->
+      </div><!-- End .container -->
+
+      <div class="mb-5"></div><!-- margin -->
+   </main><!-- End .main -->
+
+{% endblock%}

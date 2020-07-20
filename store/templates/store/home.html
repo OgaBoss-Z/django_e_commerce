@@ -1,0 +1,177 @@
+{% extends 'store/main.html' %}
+{% load static %}
+
+
+{% block content %}
+
+   <main class="main">
+
+      <div class="container">
+      <!--Home Slider-->
+         <div class="home-slider owl-carousel owl-carousel-lazy owl-theme">
+            <div class="home-slide">
+               <img class="owl-lazy" src="{% static 'store/assets/images/slider/slide-1.jpg' %}" data-src="{% static 'store/assets/images/slider/slide-1.jpg' %}" alt="slider image">
+            </div><!-- End .home-slide -->
+
+            <div class="home-slide">
+               <img class="owl-lazy" src="{% static 'store/assets/images/slider/slider2.jpg' %}" data-src="{% static 'store/assets/images/slider/slider2.jpg' %}" alt="slider image">
+            </div><!-- End .home-slide -->
+
+            <div class="home-slide">
+               <img class="owl-lazy" src="{% static 'store/assets/images/slider/slider4.jpg' %}" data-src="{% static 'store/assets/images/slider/slider4.jpg' %}" alt="slider image">
+            </div><!-- End .home-slide -->
+         </div><!-- End .home-slider -->
+
+         <div class="info-boxes-container">
+            <div class="container">
+               <div class="info-box">
+                  <i class="icon-shipping"></i>
+      
+                  <div class="info-box-content">
+                     <h4>FREE SHIPPING & RETURN</h4>
+                     <p>Free shipping on all orders above ₹ 999.</p>
+                  </div><!-- End .info-box-content -->
+               </div><!-- End .info-box -->
+      
+               <div class="info-box">
+                  <i class="icon-us-dollar"></i>
+      
+                  <div class="info-box-content">
+                     <h4>MONEY BACK GUARANTEE</h4>
+                     <p>100% money back guarantee</p>
+                  </div><!-- End .info-box-content -->
+               </div><!-- End .info-box -->
+      
+               <div class="info-box">
+                  <i class="icon-support"></i>
+      
+                  <div class="info-box-content">
+                     <h4>ONLINE SUPPORT 24/7</h4>
+                     <p>Customer Services on the go.</p>
+                  </div><!-- End .info-box-content -->
+               </div><!-- End .info-box -->
+            </div><!-- End .container -->
+         </div><!-- End .info-boxes-container -->
+
+
+         <!--Home Product  Display (Suggested)-->
+         <h2 class="subtitle">Suggested Products</h2>
+         
+         <div class="row row-sm">
+            {% for item in products %}
+               <div class="col-6 col-md-4 col-xl-5col home-pro mb-1">
+                  <div class="product-default">
+                     <figure>
+                           <a href="{{ item.get_absolute_url }}">
+                              <img src="{{item.display_img.url}}">
+                           </a>
+                     </figure>
+                     <div class="product-details">
+                        <h6 class="product-title" style="margin-bottom: 0;">
+                           <a href="{{ item.get_absolute_url }}">{{item.name|linebreaks|truncatechars:28}}</a>
+                        </h6>
+                        <div class="price-box">
+                           {% if item.discount_price %}
+                              <span class="old-price">₹ {{item.price}}</span>
+                              <span class="product-price">₹ {{item.discount_price}}</span>
+                           {% else %}
+                              <span class="product-price">₹ {{item.price}}</span>
+                           {% endif %}
+                        </div><!-- End .price-box -->
+                        <div class="product-action">
+                           <a href=""><button class="btn-icon btn-add-cart" data-toggle="modal" ><i class="icon-bag"></i>ADD TO CART</button></a>
+                        </div>
+                     </div><!-- End .product-details -->
+                  </div>
+               </div>
+            {% endfor %}
+         </div>
+
+      <!-- Pagination -->
+      {% if is_paginated %}
+         <nav class="toolbox toolbox-pagination">
+            <ul class="pagination">
+               {% if page_obj.has_previous%}
+               <li class="page-item">
+                     <a class="page-link page-link-btn" href="?page={{page_obj.next_previous_number}}"><i class="icon-angle-left"></i></a>
+               </li>
+               {% endif %}
+
+               <li class="page-item active">
+                  {% for num in page_obj.paginator.page_range %}
+                     {% if page_obj.number == num %}
+                     <a class="page-link" href="?page={{ num }}">{{ num }} <span class="sr-only">(current)</span></a>
+                        <!--<a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>-->
+                     {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'3' %}
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                     {% endif %}
+                  {% endfor %}
+               </li>
+               {% if page_obj.has_next %}
+               <li class="page-item">
+                     <a class="page-link page-link-btn" href="?page={{page_obj.next_page_number}}"><i class="icon-angle-right"></i></a>
+               </li>
+               {% endif %}
+            </ul>
+         </nav>
+      {% endif %}
+      </div><!-- End .container -->
+
+         <div class="promo-section mb-2">
+            <div class="container">
+                <h3>the perfect gift</h3>
+                <h4>Check off your list with our best gifts</h4>
+                <a href="" class="btn btn-primary">Shop Now</a>
+            </div><!-- End .container -->
+         </div><!-- End .promo-section -->
+
+         <div class="container">
+           <h2 class="subtitle subtitle-line mb-3"><span>New Arrivals</span></h2>
+
+           <div class="row row-sm">
+              {% for item in new_products %}
+                 <div class="col-6 col-md-4 col-xl-2 home-pro mb-1">
+                    <div class="product-default">
+                       <figure>
+                             <a href="{{ item.get_absolute_url }}">
+                                <img src="{{item.display_img.url}}">
+                             </a>
+                       </figure>
+                       <div class="product-details">
+                          <h6 class="product-title" style="margin-bottom: 0;">
+                             <a href="{{ item.get_absolute_url }}">{{item.name|linebreaks|truncatechars:28}}</a>
+                          </h6>
+                          <div class="price-box">
+                             {% if item.discount_price %}
+                                <span class="old-price">₹ {{item.price}}</span>
+                                <span class="product-price">₹ {{item.discount_price}}</span>
+                             {% else %}
+                                <span class="product-price">₹ {{item.price}}</span>
+                             {% endif %}
+                          </div><!-- End .price-box -->
+                          <div class="product-action">
+                             <a href=""><button class="btn-icon btn-add-cart" data-toggle="modal" ><i class="icon-bag"></i>ADD TO CART</button></a>
+                          </div>
+                       </div><!-- End .product-details -->
+                    </div>
+                 </div>
+              {% endfor %}
+           </div>
+         </div>
+     </div><!-- End .container -->
+
+
+
+
+
+      <div class="mb-4"></div><!-- margin -->
+      
+   </main><!-- End .main -->
+
+{% endblock %}
+
+
+   
+
+
+

@@ -1,0 +1,149 @@
+{% load static %}
+{% load cart_template_tags %}
+{% load mptt_tags %}
+
+   
+   <header class="header">
+      <div class="header-top">
+         <div class="container">
+            <div class="header-left header-dropdowns"
+                  <a href="#" class="mail" >
+                     <i class="icon-mail"></i> tryogaboss@gmail.com
+                  </a><!-- End .dropdown-menu -->
+            </div><!-- End .header-left -->
+
+            <div class="header-right">
+               {% if user.is_authenticated %}
+                  <p class="welcome-msg">Welcome @{{request.user.first_name}} </p>
+
+                  <div class="header-dropdown dropdown-expanded">
+                     <a href="#">Links</a>
+                     <div class="header-menu">
+                        <ul>
+                           <li><a href="{% url 'dashboard' %}">My account </a></li>
+                           <li><a href="">Blog</a></li>
+                           <li><a href="">Contact</a></li>
+                           <li><a href="{% url 'logout-page' %}" class="login-lin">Log Out</a></li>
+                        </ul>
+                     </div><!-- End .header-menu -->
+                  </div><!-- End .header-dropown -->
+
+               {% else %}
+                  <p class="welcome-msg">Welcome To OgaBoss</p>
+
+                  <div class="header-dropdown dropdown-expanded">
+                     <a href="#">Links</a>
+                     <div class="header-menu">
+                        <ul>
+                           <li><a href="">Blog</a></li>
+                           <li><a href="">Contact</a></li>
+                           <li><a href="{% url 'login-page' %}" class="login-lin">Log In</a></li>
+                        </ul>
+                     </div><!-- End .header-menu -->
+                  </div><!-- End .header-dropown -->
+                {% endif %}
+            </div><!-- End .header-right -->
+         </div><!-- End .container -->
+      </div><!-- End .header-top -->
+
+      <div class="header-middle">
+         <div class="container">
+            <div class="header-left">
+                  <a href="{% url 'home-page' %}" class="logo">
+                     <img src="{% static 'store/assets/images/logos/logo.jpg' %}" alt="Logo">
+                  </a>
+            </div><!-- End .header-left -->
+
+            <div class="header-center">
+                  <div class="header-search">
+                     <a href="#" class="search-toggle" role="button"><i class="icon-magnifier"></i></a>
+                     <form action="{% url 'search-query' %}" method="get">
+                        <div class="header-search-wrapper">
+                              <input type="search" class="form-control" name="q" id="q" placeholder="Search OgaBoss" required>
+                              <button class="btn" type="submit"><i class="icon-magnifier"></i></button>
+                        </div><!-- End .header-search-wrapper -->
+                     </form>
+                  </div><!-- End .header-search -->
+            </div><!-- End .headeer-center -->
+
+            <div class="header-right">
+                  <button class="mobile-menu-toggler" type="button">
+                     <i class="icon-menu"></i>
+                  </button>
+                  <div class="header-contact">
+                     <span>Call us now</span>
+                     <a href="tel:#"><strong>+123 45678 890</strong></a>
+                  </div><!-- End .header-contact -->
+
+                  <div class="dropdown cart-dropdown">
+                     {% if request.user.is_authenticated %}
+                        <a href="" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                           <span class="cart-count">{{request.user|cart_item_count}}</span>
+                        </a>
+                        <div class="dropdown-menu" >
+                           <div class="dropdownmenu-wrapper">
+                              <div class="dropdown-cart-products">
+                              </div><!-- End .cart-product -->
+
+                              <div class="dropdown-cart-action">
+                                    <a href="{% url 'cart-summary' %}" class="btn">View Cart</a>
+                                    <a href="{% url 'checkout-page' %}" class="btn">Checkout</a>
+                              </div><!-- End .dropdown-cart-total -->
+                           </div><!-- End .dropdownmenu-wrapper -->
+                        </div><!-- End .dropdown-menu -->
+
+                     {% else %}
+                        <a href="" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                           <span class="cart-count"></span>
+                        </a>
+                        <div class="dropdown-menu" >
+                           <div class="dropdownmenu-wrapper">
+                              <div class="dropdown-cart-products">
+                              </div><!-- End .cart-product -->
+
+                              <div class="dropdown-cart-action">
+                                    <a href="" class="btn">View Cart</a>
+                                    <a href="" class="btn">Checkout</a>
+                              </div><!-- End .dropdown-cart-total -->
+                           </div><!-- End .dropdownmenu-wrapper -->
+                        </div><!-- End .dropdown-menu -->
+
+                     {% endif %}
+                 </div><!-- End .dropdown -->
+
+            </div><!-- End .header-right -->
+         </div><!-- End .container -->
+      </div><!-- End .header-middle -->
+
+      <div class="header-bottom sticky-header">
+         <div class="container">
+             <nav class="main-nav">
+                <ul class="menu sf-arrows">
+                     <li class="active"><a href="{% url 'home-page' %}">Home</a></li>
+                     {% recursetree category %}                        
+                        <li>
+                              <a href="/category/{{node.id}}/{{node.slug}}/" class="sf-with-ul">{{ node.name }}</a>
+                              <div class="megamenu megamenu-fixed-width">
+                                 <div class="row">
+                                    <div class="col-lg-8">
+                                          <div class="row">
+                                             <div class="col-lg-7">
+                                                {% if not node.is_leaf_node %}
+                                                   <ul>
+                                                      <!-- <li><a href="category.html">Fullwidth Banner<span class="tip tip-hot">Hot!</span></a></li> -->
+                                                      <li><a href="">{{children}}</a></li>
+                                                   </ul>
+                                                {% endif %}
+                                             </div><!-- End .col-lg-6 -->
+                                          </div><!-- End .row -->
+                                    </div><!-- End .col-lg-8 -->
+                                 </div>
+                              </div><!-- End .megamenu -->
+                        </li>
+                     {% endrecursetree %}
+                </ul>
+             </nav>
+         </div><!-- End .header-bottom -->
+     </div><!-- End .header-bottom -->
+
+   </header><!-- End .header -->

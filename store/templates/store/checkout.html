@@ -1,0 +1,172 @@
+{% extends 'store/main.html' %} 
+
+{% block content %}
+
+
+<main class="main">
+   <nav aria-label="breadcrumb" class="breadcrumb-nav">
+      <div class="container">
+         <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url 'home-page' %}"><i class="icon-home"></i></a></li>
+            <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+         </ol>
+      </div><!-- End .container -->
+   </nav>
+
+   <div class="container">
+      <div class="row">
+         <div class="col-lg-5">
+            <!--<div class="checkout-info-box">         
+               <div class="cart-discount">
+                  <h4>Apply Discount Code</h4>
+                  <form action="{% url 'add-coupon' %}" method="POST">
+                  {% csrf_token %}
+                  <div class="input-group">
+                     {{couponform.code}} 
+                     <div class="input-group-append">
+                        <button class="btn btn-sm btn-primary" type="submit">Apply Discount</button>
+                     </div>
+                  </div> End .input-group ->
+                  </form>
+               </div><!-- End .cart-discount ->
+            </div><!-- End .checkout-info-box -->
+
+
+            <div class="col-">
+               <div class="order-summary">
+                  <h3>Summary <span style="float: right;">{{order.products.count}}</span> </h3>
+
+                  <h4>
+                     <a data-toggle="collapse" href="#order-cart-section" class="collapsed" role="button" aria-expanded="false" aria-controls="order-cart-section">View Products</a>
+                  </h4>
+
+                  <div class="collapse" id="order-cart-section">
+                     <table class="table table-mini-cart">
+                        <tbody>
+                           {% for order_item in order.products.all %}
+                              <tr>
+                                 <td class="product-col">
+                                    <figure class="product-image-container">
+                                          <a href="" class="product-image">
+                                             <img src="{{order_item.product.display_img.url}}" alt="product">
+                                          </a>
+                                    </figure>
+                                    <div>
+                                       <h3 class="product-title">
+                                          <a href="">{{order_item.product.name}}</a>
+                                       </h3>
+                                          <span class="product-qty">Qty:{{order_item.quantity}}</span>
+                                    </div>
+                                 </td>
+                                 <td class="price-col">₹ {{order_item.get_final_price}}</td>
+                              </tr>
+                           {%  endfor %}
+                        </tbody>    
+                     </table>
+                  </div><!-- End #order-cart-section -->
+               </div><!-- End .order-summary -->
+            </div>
+
+           
+            
+            
+         </div><!-- End .col-lg-5 -->
+
+         <div class="col-lg-1"></div>
+
+         <div class="col-lg-6">
+            <div class="checkout-payment">
+               <h2 class="step-title">Order Summary And Payment:</h2>
+               <div id="new-checkout-address" class="show">
+                  <form action="" method="POST">
+                  {% csrf_token %}
+                     <h3>Shipping Address</h3>
+
+                     <div class="shipping-form">
+                        <div class="form-group required-field">
+                           <label for="street_address">Address</label>
+                           {{form.street_address}}
+                           <!-- <input type="text" id="street_address"  class="form-control" placeholder="Street Address" required> -->
+                        </div>
+                        <div class="form-group required-field">
+                           <label for="apartment_address">Apartment Address</label>
+                           {{form.apartment_address}}
+                           <!-- <input type="text" id="apartment_address" class="form-control" placeholder="House/Flat Number" required> -->
+                        </div>
+                        <div class="form-group">
+                           <label for="shipping_address2">Address 2 (Optional)</label>
+                           {{form.address_2}}
+                           <!-- <input type="text" id="shipping_address2" class="form-control" placeholder="Optional Address" required> -->
+                        </div>
+                        <div class="form-group required-field">
+                           <label>Phone Number </label>
+                           <div class="form-control-tooltip">
+                              {{form.phone_number}}
+                              <span class="input-tooltip" data-toggle="tooltip" title="For delivery questions." data-placement="right"><i class="icon-question-circle"></i></span>
+                           </div>
+                        </div>
+                        <div class="form-group required-field">
+                           <label for="shipping_city">City</label>
+                           {{form.city}}
+                           <!--  <input type="text" id="shipping_city" class="form-control" placeholder="City" required> -->
+                        </div>
+                        <div class="form-group required-field">
+                           <label for="state">State</label>
+                           {{form.state}}
+                           <!-- <input type="text" id="shipping_state" class="form-control" placeholder="State" required> -->
+                        </div>
+                        <div class="form-group required-field">
+                           <label for="shipping_zip">Zip/Postal Code </label>
+                           {{form.zip_code}}
+                           <!-- <input type="text" id="shipping_zip" class="form-control" placeholder="Zip/Postal Code"> -->
+                        </div>
+
+                        <!-- <div class="custom-control custom-checkbox">
+                           <input type="checkbox" class="custom-control-input" id="set_default_shipping" name="set_default_shipping">
+                           <label class="custom-control-label" for="set_default_shipping"><span class="mr-3"></span> Save as default Shipping Address</label>
+                        </div> -->
+                     </div>
+
+                     <!-- {% if default_shipping_address%}
+                     <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="use_default_shipping" name="use_default_shipping">
+                        <label class="custom-control-label" for="use_default_shipping"><span class="mr-3"></span>Use default Shipping Address: {{default_shipping_address.address|truncatechars:10}}</label>
+                     </div>
+                     {% endif %}
+                     
+                     <hr> -->
+                     <div class="custom-control custom-checkbox">
+                        <input {% if form.save_info.value %}checked{% endif %} type="checkbox" class="custom-control-input" id="save-info">
+                        
+                        <label class="custom-control-label" for="save-info"><span class="mr-3"></span> Save this information for next time</label>
+                     </div>
+                     <hr>
+
+                     <div class="form-group mt-2">
+                        <h3>Payment  Option</h3>
+                     
+                              <div class="d-block my-2">
+                              {% for value, name in form.fields.payment_option.choices  %}
+                              <div class="custom-control custom-radio">
+                                 <input id="{{name}}" type="radio" class="custom-control-input" value="{{value}}" name="payment_option">
+                                 <label for="{{name}}" class="custom-control-label"><span class="mr-4"></span>{{name}}</label>
+                              </div>
+                              {% endfor %}
+                              </div>
+                     </div>
+                     <div class="clearfix">
+                        <a href="{% url 'payment' %}"><button class="btn btn-primary float-right">Place Order</button></a>
+                     </div><!-- End .clearfix -->
+                  </form>
+               </div><!-- End #new-checkout-address -->
+            </div><!-- End .checkout-payment -->
+
+            
+         </div><!-- End .col-lg-8 -->
+      </div><!-- End .row -->
+   </div><!-- End .container -->
+
+   <div class="mb-3"></div><!-- margin -->
+</main><!-- End .main -->
+
+{% endblock %}

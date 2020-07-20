@@ -1,0 +1,136 @@
+{% extends 'store/main.html' %}
+{% block content %}
+
+   <main class="main">
+      <nav aria-label="breadcrumb" class="breadcrumb-nav">
+         <div class="container">
+            <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="{% url 'home-page' %}"><i class="icon-home"></i></a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Order Summary</li>
+            </ol>
+         </div><!-- End .container -->
+      </nav>
+
+      <div class="container">
+         <div class="container-box">
+            <div class="row">
+               <div class="col-lg-8">
+                  <div class="cart-table-container">
+                     <table class="table table-cart">
+                        <thead>
+                           <tr>
+                              <th class="product-col">Product</th>
+                              <th class="price-col">Unit Price (₹)</th>
+                              <th class="qty-col">Quantity</th>
+                              <th>Subtotal (₹)</th>
+                              <th></th>
+                           </tr>
+                        </thead>
+                        
+                        <tbody>
+                           {% for order_item in object.products.all %}
+                           <tr class="product-row">
+                              <td class="product-col">
+                                 <a href="{{ order_item.product.get_absolute_url }}"><img src="{{order_item.product.display_img.url}}" alt="" style="width: 40px;"></a><span class="mr-4"></span>
+                                    <h2 class="product-title">
+                                       <a href="{{ order_item.product.get_absolute_url }}">{{order_item.product.name}}</a>
+                                    </h2>
+                              </td>
+                              <td>
+                                 {% if order_item.product.discount_price%}
+                                    {{order_item.product.discount_price}}
+                                 {% else %}
+                                    {{order_item.product.price}}
+                                 {% endif %}
+                              </td>
+                              <td>
+                                 <a href="{% url 'remove-single-item-from-cart'  order_item.product.id order_item.product.slug %}"><i class="fas fa-minus-square mr-3"></i></a>
+                                 {{order_item.quantity}} 
+                                 <a href="{% url 'add-single-item-to-cart'  order_item.product.id order_item.product.slug %}"><i class="ml-3 fas fa-plus-square"></i></a>
+                              </td>
+                              <td>
+                                 {% if order_item.product.discount_price%}
+                                    {{order_item.get_total_discount_item_price}} <br>
+                                    <span class="badge badge-primary mr-2" style="background-color: #08c;;">Saved ₹ {{order_item.get_amount_saved}}</span>
+                                 {% else %}
+                                 {{order_item.get_total_item_price}}
+                                 {% endif %}
+                              </td>
+                              <td>
+                                 <a style="color: red;" href="{% url 'remove-from-cart' order_item.product.id order_item.product.slug %}">
+                                    <i class="fas fa-trash float-right"></i>
+                                 </a>
+                              </td>
+                           </tr>
+                           {% endfor %}
+                        </tbody>
+
+                        <tfoot>
+                           <tr>
+                              <td colspan="4" class="clearfix">
+                                    <div class="">
+                                       <a href="{%url 'home-page' %}" class="btn btn-outline-secondary" style="float: right;">Continue Shopping</a>
+                                    </div><!-- End .float-left -->
+                              </td>
+                           </tr>
+                        </tfoot>
+                     </table>
+                  </div><!-- End .cart-table-container -->
+               </div><!-- End .col-lg-8 -->
+
+               <div class="col-lg-4">
+                  <div class="checkout-info-box">         
+                     <div class="cart-discount">
+                        <h4>Apply Discount Code</h4>
+                        <form action="{% url 'add-coupon' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="input-group">
+                              <!-- <input type="text" class="form-control form-control-sm" placeholder="Enter Coupon Code"  required> -->
+                              {{couponform.code}} 
+                              <div class="input-group-append">
+                                 <button class="btn btn-sm btn-primary" type="submit">Apply Discount</button>
+                              </div>
+                        </div><!-- End .input-group -->
+                        </form>
+                     </div><!-- End .cart-discount -->
+                  </div><!-- End .checkout-info-box -->
+                  
+                  <div class="cart-summary">
+                     <h3><b>Summary</b></h3>
+                     <table class="table table-totals">
+                        <tbody>
+                           <!-- <tr>
+                              <td style="color: grey;"><em><b> Amount saved</b></em></td>
+                              <td style="color: grey;"><em><b> ₹ {{object.saved_total}}</b></em></td>
+                           </tr> -->
+                           <tr>
+                              <td><b> Subtotal</b></td>
+                              <td><b>₹ {{object.sub_total}}</b></td>
+                           </tr>
+                           {% if object.coupon %}
+                              <tr>
+                                 <td style="color: grey;"><b>Coupon Discount</b></td>
+                                 <td style="color: grey;"><b> - ₹ {{object.discount_price}}</b></td>
+                              </tr>
+                           {% endif %}
+                        </tbody>
+                        <tfoot>
+                           <tr>
+                              <td>Order Total</td>
+                              <td>₹ {{object.get_total}}</td>
+                           </tr>
+                        </tfoot>
+                     </table>
+
+                     <div class="checkout-methods">
+                        <a href="{% url 'checkout-page' %}" class="btn btn-block btn-sm btn-primary">Go to Checkout</a>
+                     </div><!-- End .checkout-methods -->
+                  </div><!-- End .cart-summary -->
+               </div><!-- End .col-lg-4 -->
+            </div><!-- End .row -->
+         </div><!-- End .container-box -->
+      </div><!-- End .container -->
+   </main><!-- End .main -->
+
+
+{% endblock %}

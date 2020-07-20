@@ -1,0 +1,293 @@
+{% extends 'store/main.html' %}
+
+{% block content %}
+
+   <main class="main">
+      <nav aria-label="breadcrumb" class="breadcrumb-nav">
+         <div class="container">
+            <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href=""><i class="icon-home"></i></a></li>
+                  <li class="breadcrumb-item"><a href="">Electronics</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Headsets</li>
+            </ol>
+         </div><!-- End .container -->
+      </nav>
+
+      <div class="container">
+         <div class="row">
+            <div class="col-lg-9">
+                  <div class="product-single-container product-single-default">
+                     <div class="row">
+                        <div class="col-lg-7 col-md-6 product-single-gallery mb-0">
+                           <div class="product-slider-container product-item">
+                              <div class="product-single-carousel owl-carousel owl-theme">
+                                 <div class="product-item mb-0">
+                                    <img class="product-single-image" src="{{product.display_img.url}}" data-zoom-image="{{product.display_img.url}}"/>
+                                 </div>
+                                 {% for img in images %}
+                                    <div class="product-item">
+                                       <img class="product-single-image" src="{{img.image.url}}" data-zoom-image="{{img.image.url}}"/>
+                                    </div>
+                                 {% endfor %}
+                              </div>
+                              <!-- End .product-single-carousel -->
+                              <span class="prod-full-screen">
+                                 <i class="icon-plus"></i>
+                              </span>
+                           </div>
+                           <div class="prod-thumbnail row owl-dots transparent-dots" id='carousel-custom-dots'>
+                              <div class="owl-dot">
+                                 <img src="{{product.display_img.url}}"/>
+                              </div>
+                              {% for img in images %}
+                                 <div class="owl-dot">
+                                    <img class="product-single-image" src="{{img.image.url}}" data-zoom-image="{{img.image.url}}"/>
+                                 </div>
+                              {% endfor %}
+                           </div>
+                        </div><!-- End .col-lg-7 -->
+
+                        <div class="col-lg-5 col-md-6">
+                           <div class="product-single-details">
+                              <h5 class="product-title mb-1">{{product.name}}</h5>
+
+                              <h4><em>{{product.brand}}</em></h4>
+
+                              <div class="price-box">
+                                 {% if product.discount_price %}
+                                    <span class="old-price" id="discount-price">₹ {{product.price}}</span>
+                                    <span class="product-price" id="price">₹ {{product.discount_price}}</span>
+                                 {% else %}
+                                    <span class="product-price" id="price">₹ {{product.price}}</span>
+                                 {% endif %}
+                              </div><!-- End .price-box -->
+
+                              <div class="product-desc">
+                                 <p>{{product.key_features|safe}}</p>
+                              </div><!-- End .product-desc -->
+
+                              <!-- <div class="row">
+                                 <div class="col-md-6 mb-0">
+                                    <div class="variation">
+                                       {% if product.variation_set.count > 1 %}
+                                          <form action="{% url 'cart' %}" method="GET" id="cart-form">
+                                             <select name="item" id="" class="form-control variation_select">
+                                                {% for var_item in product.variation_set.all %}
+                                                   <option data-discount='{{var_item.discount_price}}' data-price='{{var_item.price}}' value="{{var_item.id}}">
+                                                      {{var_item}}
+                                                   </option>
+                                                {% endfor %}
+                                             </select>
+                                          </form>                                          
+                                       {% endif %}
+                                    </div>
+                                 </div>
+                              </div> -->
+
+                              <div class="product-action product-all-icons">
+                                 <a href="{{object.get_add_to_cart_url}}" class="paction add-cart" title="Add to Cart">
+                                    <span>Add to Cart</span>
+                                 </a>
+                                 <a href="{{object.get_remove_from_cart_url}}" class="paction" title="Remove from Cart">
+                                    <i class="fas fa-trash" style="color: red;"></i>
+                                    <span>Delete</span>
+                                 </a>
+                              </div><!-- End .product-action -->
+
+                              <div class="product-single-share">
+                                 <label>Share:</label>
+                                
+                                 <!-- www.addthis.com share plugin-->
+                                 <div class="addthis_inline_share_toolbox">
+                                    <a href="#" class="social-icon" target="_blank"><i class="icon-facebook"></i></a>
+                                    <a href="#" class="social-icon" target="_blank"><i class="icon-instagram"></i></a>
+                                    <a href="#" class="social-icon" target="_blank"><i class="icon-twitter"></i></a>
+                                    <a href="#" class="social-icon" target="_blank"><i class="icon-linkedin"></i></a>
+                                 </div>
+                              </div><!-- End .product single-share -->
+                           </div><!-- End .product-single-details -->
+                        </div><!-- End .col-lg-5 -->
+                     </div><!-- End .row -->
+                  </div><!-- End .product-single-container -->
+
+                  <div class="product-single-tabs">
+                     <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                           <a class="nav-link active" id="product-tab-desc" data-toggle="tab" href="#product-desc-content" role="tab" aria-controls="product-desc-content" aria-selected="true">Description</a>
+                        </li>
+                        <li class="nav-item">
+                           <a class="nav-link" id="product-tab-spec" data-toggle="tab" href="#product-spec-content" role="tab" aria-controls="product-spec-content" aria-selected="true">Specification</a>
+                        </li>
+                        <li class="nav-item">
+                           <a class="nav-link" id="product-tab-reviews" data-toggle="tab" href="#product-reviews-content" role="tab" aria-controls="product-reviews-content" aria-selected="false">Reviews</a>
+                        </li>
+                     </ul>
+                     <div class="tab-content">
+                        <div class="tab-pane fade show active" id="product-desc-content" role="tabpanel" aria-labelledby="product-tab-desc">
+                              <div class="product-desc-content">
+                                 <p>{{object.description|safe}}</p>
+                              </div><!-- End .product-desc-content -->
+                        </div><!-- End .tab-pane -->
+
+                        <div class="tab-pane fade show" id="product-spec-content" role="tabpanel" aria-labelledby="product-tab-spec">
+                              <div class="product-spec-content">
+                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat.</p>
+                                 <ul>
+                                    <li><i class="icon-ok"></i>Any Product types that You want - Simple, Configurable</li>
+                                    <li><i class="icon-ok"></i>Inventory Management with Backordered items</li>
+                                 </ul>
+                                 <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, <br>quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                              </div><!-- End .product-desc-content -->
+                        </div><!-- End .tab-pane -->
+
+                        <div class="tab-pane fade" id="product-reviews-content" role="tabpanel" aria-labelledby="product-tab-reviews">
+                              <div class="product-reviews-content">
+                                 <div class="collateral-box">
+                                    <ul>
+                                          <li>Be the first to review this product</li>
+                                    </ul>
+                                 </div><!-- End .collateral-box -->
+
+                                 <div class="add-product-review">
+                                    <div class="row">
+                                       <div class="col-md-7">
+                                          <article class="media content-section">
+                                             <img class="rounded-circle review-img" src="{{object.display_img.url}}" alt="User img">
+                                             <div class="media-body">
+                                                <div class="review-metadata">
+                                                   Ogaboss
+                                                   <small class="text-muted">11/11/2020</small>
+                                                </div>
+                                                <h5 class="review-subject">Subject of review</h5>
+                                                <p class="review-content">
+                                                   Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aperiam ipsa labore sunt magnam quod obcaecati possimus
+                                                </p>
+                                             </div>
+                                           </article>
+                                       </div>
+
+                                       <div class="col-md-5">
+                                          <h3 class="text-uppercase heading-text-color font-weight-semibold">WRITE YOUR OWN REVIEW</h3>
+                                          <p>How do you rate this product? *</p>
+                                          <!-- /review/{{product.pk}}{{ product.slug }}  -->
+                                          <form action="{% url 'review' product.pk product.slug %}" method="POST">
+                                             {% csrf_token %}
+                                             <!-- <div class="form-group">
+                                                <label>Fullname<span class="required">*</span></label>
+                                                <input type="text" class="form-control form-control-sm" required>
+                                             </div> --><!-- End .form-group -->
+                                             <div class="form-group">
+                                                <label>Subject of Your Review <span class="required">*</span></label>
+                                                <input type="text" name="subject" class="form-control form-control-sm" required>
+                                             </div><!-- End .form-group -->
+                                             <div class="form-group ">
+                                                <label>Your Review <span class="required">*</span></label>
+                                                <textarea name="content" rows="4" class="form-control form-control-sm"></textarea>
+                                             </div><!-- End .form-group -->
+
+                                             {% if user.id is not None %}
+                                                <input type="submit" class="btn btn-primary" value="Submit Review">
+                                             {% else %}
+                                                You must be logged in to post a review. <span><a href="{% url 'login-page' %}"><em style="color: #08ce;">Login</em></a></span>
+                                             {% endif %}
+                                          </form>
+                                       </div>
+                                    </div>
+
+                                    
+                                 </div><!-- End .add-product-review -->
+                              </div><!-- End .product-reviews-content -->
+                        </div><!-- End .tab-pane -->
+                     </div><!-- End .tab-content -->
+                  </div><!-- End .product-single-tabs -->
+            </div><!-- End .col-lg-9 -->
+
+            <div class="sidebar-overlay"></div>
+            <div class="sidebar-toggle"><i class="icon-sliders"></i></div>
+            <aside class="sidebar-product col-lg-3 padding-left-lg mobile-sidebar">
+               <div class="sidebar-wrapper">
+                  <div class="widget widget-info">
+                     <ul>
+                        <li>
+                           <i class="icon-shipping"></i>
+                           <h4>FREE<br>SHIPPING</h4>
+                        </li>
+                        <li>
+                           <i class="icon-us-dollar"></i>
+                           <h4>100% MONEY<br>BACK GUARANTEE</h4>
+                        </li>
+                        <li>
+                           <i class="icon-online-support"></i>
+                           <h4>ONLINE<br>SUPPORT 24/7</h4>
+                        </li>
+                     </ul>
+                  </div><!-- End .widget -->
+
+                  <div class="widget widget-featured">
+                     <h2 class="widget-title">Related Products</h2>
+                     
+                     <div class="widget-body">
+                        <div class="owl-carousel widget-featured-products">
+                           <div class="featured-col">
+                              {% for item in related %}
+                                 <div class="product-default left-details product-widget mb-1">
+                                    <figure>
+                                       <a href="{{ item.get_absolute_url }}">
+                                          <img src="{{item.display_img.url}}">
+                                       </a>
+                                    </figure>
+                                    <div class="product-details">
+                                       <h2 class="product-title mb-0">
+                                          <a href="{{ item.get_absolute_url }}">{{item.name}}</a>
+                                       </h2>
+                                       
+                                       <div class="price-box">
+                                          {% if item.discount_price %}
+                                             <span class="old-price">₹ {{item.price}}</span>
+                                             <span class="product-price">₹ {{item.discount_price}}</span>
+                                          {% else %}
+                                             <span class="product-price">₹ {{item.price}}</span>
+                                          {% endif %}
+                                       </div><!-- End .price-box -->
+                                    </div><!-- End .product-details -->
+                                 </div>
+                              {% endfor %}
+                           </div><!-- End .featured-col -->
+
+                        </div><!-- End .widget-featured-slider -->
+                     </div><!-- End .widget-body -->
+                  </div><!-- End .widget -->
+               </div>
+            </aside><!-- End .col-md-3 -->
+         </div><!-- End .row -->
+      </div><!-- End .container -->
+
+   </main><!-- End .main -->
+
+   <script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <script type='text/javascript'>
+      $(document).ready(function(){
+
+         function setPrice(){
+            var price = $(".variation_select option:selected").attr('data-discount')
+            var discountPrice = $(".variation_select option:selected").attr('data-price')
+         //$("#price").text(price);
+
+            var discountPrice = $(".variation_select option:selected").attr('data-discount')
+            if (discountPrice == "" && discountPrice != None && discountPrice != null) {
+               $("#price").text(price);
+               $("#discount-price").text(discount_price);
+            }else {
+               $("#price").text(price);
+            }
+         }
+         setPrice()
+
+         $(".variation_select").change(function(){
+            setPrice()
+         })
+         
+      })
+   </script>
+
+{% endblock %}

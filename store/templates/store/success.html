@@ -1,0 +1,42 @@
+{% extends 'store/main.html' %}
+{% load static %}
+
+{% block content %}
+<style type="text/css">
+   #box{
+      max-width: 400px;
+      margin:0 auto;
+      padding:10px;
+      background-color: rgb(252, 252, 252);
+      text-align: center;
+      box-shadow: 0 1px 3px 0 #0f0f0f;
+      border-radius: 5px;
+      border: 1px solid transparent;
+   }
+
+   #succes-icon {
+      width: 120px;
+      height: 130px;
+      margin: auto;
+   }
+</style>
+
+<main class="main">
+   <div class="container">
+      <div id="box">
+         <div id="succes-icon" >
+            <img src="{% static 'store/assets/images/item/check1.png' %}" alt="Check image">
+         </div>
+         <h2>Thanks for your order</h2>
+         <p>Your order invoice is sent to your registered email. <br> For quick view,  Check your dashboard.</p>
+         <hr>
+         <a class="btn btn-primary" href="{% url 'home-page' %}">Continue Shopping</a>
+      </div>
+   </div>
+   <div class="mb-3"></div>
+</main>
+
+
+   
+
+{% endblock %}

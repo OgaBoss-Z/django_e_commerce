@@ -1,0 +1,123 @@
+{% extends 'store/main.html' %}
+
+{% block content %}
+
+   <main class="main">
+      <nav aria-label="breadcrumb" class="breadcrumb-nav">
+         <div class="container">
+            <ol class="breadcrumb">
+               <li class="breadcrumb-item"><a href="{% url 'home-page' %}"><i class="icon-home"></i></a></li>
+               <li class="breadcrumb-item active" aria-current="page">Order Detail</li>
+            </ol>
+         </div><!-- End .container -->
+      </nav>
+
+      <div class="container">
+         <div class="row">
+            <div class="col-lg-9 order-lg-last dashboard-content">
+               <div class="card">
+                  <div class="card-header">
+                     My Orders
+                  </div><!-- End .card-header -->
+
+                  
+                  <div class="cart-table-container">
+                     <table class="table table-cart">
+                        <thead>
+                           <tr>
+                              <th class="product-col">Product</th>
+                              <th class="price-col">Unit Price (₹)</th>
+                              <th class="qty-col">Quantity</th>
+                              <th>Subtotal (₹)</th>
+                              <th></th>
+                           </tr>
+                        </thead>
+                        
+                        <tbody>
+                           {% for order_item in object.products.all %}
+                           <tr class="product-row">
+                              <td class="product-col">
+                                 <a href="{{ order_item.product.get_absolute_url }}"><img src="{{order_item.product.display_img.url}}" alt="" style="width: 40px;"></a><span class="mr-4"></span>
+                                    <h2 class="product-title">
+                                       <a href="{{ order_item.product.get_absolute_url }}">{{order_item.product.name}}</a>
+                                    </h2>
+                              </td>
+                              <td>
+                                 {% if order_item.product.discount_price%}
+                                    {{order_item.product.discount_price}}
+                                 {% else %}
+                                    {{order_item.product.price}}
+                                 {% endif %}
+                              </td>
+                              <td>
+                                 <a href="{% url 'remove-single-item-from-cart'  order_item.product.id order_item.product.slug %}"><i class="fas fa-minus-square mr-3"></i></a>
+                                 {{order_item.quantity}} 
+                                 <a href="{% url 'add-single-item-to-cart'  order_item.product.id order_item.product.slug %}"><i class="ml-3 fas fa-plus-square"></i></a>
+                              </td>
+                              <td>
+                                 {% if order_item.product.discount_price%}
+                                    {{order_item.get_total_discount_item_price}} <br>
+                                    <span class="badge badge-primary mr-2" style="background-color: #08c;;">Saved ₹ {{order_item.get_amount_saved}}</span>
+                                 {% else %}
+                                 {{order_item.get_total_item_price}}
+                                 {% endif %}
+                              </td>
+                              <td>
+                                 <a style="color: red;" href="{% url 'remove-from-cart' order_item.product.id order_item.product.slug %}">
+                                    <i class="fas fa-trash float-right"></i>
+                                 </a>
+                              </td>
+                           </tr>
+                           {% endfor %}
+                        </tbody>
+
+                        <tfoot>
+                           <tr>
+                              <td colspan="4" class="clearfix">
+                                    <div class="">
+                                       <a href="{%url 'home-page' %}" class="btn btn-outline-secondary" style="float: right;">Continue Shopping</a>
+                                    </div><!-- End .float-left -->
+                              </td>
+                           </tr>
+                        </tfoot>
+                     </table>
+                  </div><!-- End .cart-table-container -->
+               </div><!-- End .card -->
+            </div><!-- End .col-lg-9 -->
+
+            <aside class="sidebar col-lg-3">
+                  <div class="widget widget-dashboard">
+                     <h3 class="widget-title">My Account</h3>
+
+                     <ul class="list">
+                        <li><a href="{% url 'dashboard' %}">Account Information</a></li>
+                        <li class="active"><a href="{% url 'user-orders' %}">My Orders</a></li>
+                        <li><a href="{% url 'refund-page' %}">Request a Refund</a></li>
+                        <li><a href="{% url 'dashboard-update' %}">Update Profile</a></li>
+                        <li><a href="{% url 'logout-page' %}">Logout</a></li>
+                     </ul>
+                  </div><!-- End .widget -->
+
+                  <div class="card">
+                     <div class="card-header">
+                        Account 
+                     </div><!-- End .card-header -->
+
+                     <div class="card-body">
+                        <div class="row">
+                           <p class="dashboard-p">
+                              Username: {{user.username}}<br>
+                              Last Login: {{user.last_login}} <br>
+                              Date Joined: {{user.date_joined.date}}
+                           </p>
+                        </div>
+                     </div><!-- End .card-body -->
+                  </div><!-- End .card -->
+            </aside><!-- End .col-lg-3 -->
+         </div><!-- End .row -->
+      </div><!-- End .container -->
+
+      <div class="mb-5"></div><!-- margin -->
+   </main><!-- End .main -->
+
+{% endblock%}

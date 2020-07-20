@@ -1,0 +1,50 @@
+
+
+<div class="col-md-12 mb-4">
+   <h4 class="d-flex justify-content-between align-items-center mb-3">
+   <!--<span class="text-muted">Your cart</span>-->
+   
+   </h4>
+   <ul class="list-group mb-3 z-depth-1">
+   {% for order_item in order.products.all %}
+   <li class="list-group-item d-flex justify-content-between lh-condensed">
+      <div>
+      <h4 class="my-0">{{ order_item.quantity }} x {{ order_item.product.name}}</h4>
+      </div>
+      <span class="text-muted">₹ {{ order_item.get_final_price }}</span>
+   </li>
+   {% endfor %}
+
+   {% if order.coupon %}
+   <li class="list-group-item d-flex justify-content-between bg-light">
+      <div class="text-success">
+      <h3 class="my-0">Coupon Code</h3>
+      <small>{{ order.coupon.code }}</small>
+      </div>
+      <span class="text-success">-₹ {{ order.discount_price}}</span>
+   </li>
+   {% endif %}
+   
+   <li class="list-group-item d-flex justify-content-between">
+      <span>Total (INR)</span>
+      <strong>₹ {{ order.get_total }}</strong>
+   </li>
+   </ul>
+
+   
+   <!-- <div class="checkout-discount">
+      <h4>
+            <a data-toggle="collapse" href="#checkout-discount-section" class="collapsed" role="button" aria-expanded="false" aria-controls="checkout-discount-section">Apply Discount Code</a>
+      </h4>
+
+      <div class="collapse" id="checkout-discount-section">
+            <form action="{% url 'add-coupon' %}" method="POST">
+               {% csrf_token %}
+               {{couponform.code}}
+               <!-<input type="text" class="form-control form-control-sm" placeholder="Enter discount code"  required>->
+               <button class="btn btn-sm btn-outline-secondary" type="submit">Apply Discount</button>
+            </form>
+      </div>
+   </div> -->
+
+</div>
