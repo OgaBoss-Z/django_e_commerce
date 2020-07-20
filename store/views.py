@@ -79,18 +79,6 @@ def userProductOrdered(request, id):
    
    return render(request, "store/home_page.html", context)
    
-
-''' class HomeView(ListView):
-   model = Product
-   queryset = Product.objects.all().order_by('?')
-   paginate_by = 15
-   template_name = "store/home.html"
-   
-   def get_context_data(self, *args, **kwargs):
-      context = super(HomeView, self).get_context_data(**kwargs)
-      context['new_products'] = Product.objects.all().is_new()#.order_by('?')
-      return context  '''
-
    
 class ProductDetailView(DetailView):
    model = Product
@@ -110,26 +98,6 @@ class ProductDetailView(DetailView):
    
    #Import random
    #context['related'] = sorted(Product.objects.get_related(instance)[:3], key=lambda x:random.ramdom()
-
-   
-class VariationView(ListView):
-   model = Variation
-   queryset = Variation.objects.all()
-   
-   def get_context_data(self, *args, **kwargs):
-      context = super(VariationView, self).get_context_data(*args, **kwargs)
-      context["formset"] = VariationInventoryFormSet(queryset=self.get_queryset)
-      return context
-   
-   def get_queryset(self, *args, **kwargs):
-      product_pk = self.kwargs.get('pk')
-      if product_pk:
-         product = get_object_or_404(Product, pk=product_pk)
-         queryset  = Variation.objects.filter(product=product)
-      return queryset
-   
-   def post(self, request, *args, **kwargs):
-      print(request.POST)
 
 
 def product_detail(request, pk, slug):
@@ -573,7 +541,6 @@ class CommentView(View):
          
          return redirect('product-detail')
 
-  
 
 class ReviewView(View):
    form_class = ReviewForm
@@ -610,39 +577,6 @@ class ReviewView(View):
 
       return render(request, self.template_name, {'form': form})  
   
-  
-  
-
-""" def review(request, pk, slug):
-   url = request.META.get('HTTP_REFERRER') #this gets las url i.e  product detail page
-   #return HttpResponse(url) #Just a test to display something on the page
-   if request.method == 'POST':
-      form = ReviewForm(request.POST)
-      if form.is_valid():
-         subject = form.cleaned_data['subject']
-         rate = form.cleaned_data['rate']
-         content = form.cleaned_data['content']
-         
-         review = ProductReview (
-            user = request.user,
-            product = get_object_or_404(Product, pk=pk, slug=slug),
-            subject = subject,
-            rate = rate,
-            content = content,
-         )
-         # Save the review in the database (ProductReview Model)
-         review.save()
-         # Success Review Message
-         messages.success(request, "Thanks for your Review")
-         print(request.POST)
-         #return HttpResponseRedirect(url)
-         return HttpResponseRedirect('review', {'pk':pk, 'slug':slug})
-      
-         #return redirect('product-detail')
-      
-      return HttpResponseRedirect(url)
-   
-"""
 
 def category(request, id, slug):
    category = Category.objects.all()
