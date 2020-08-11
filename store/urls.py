@@ -2,8 +2,6 @@ from django.contrib import admin
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import path
 from .views import (
-   #HomeView, 
-   VariationView,
    SearchProduct,
    ProductDetailView,
    CartSummaryView,
@@ -18,12 +16,9 @@ from .views import (
 from . import views
 
 urlpatterns = [
-   #path('', HomeView.as_view(), name='home-page'),
    path('', views.home, name='home-page'),
-   #path('<pk>/<slug>/', views.product_detail, name='product-detail'),
    path('products/', views.allProducts, name='products-page'),
    path('<pk>/<slug>/', ProductDetailView.as_view(), name='product-detail'),
-   path('<pk>/inventory/', VariationView.as_view(), name='product-inventory'),
    path('search', SearchProduct.as_view(), name='search-query'),
    path('add-to-cart/<pk>/<slug>/', views.add_to_cart, name='add-to-cart'),
    path("add-to-cart-home-page/", views.add_to_cart_home_page, name="add-to-cart-home-page"),   
@@ -32,14 +27,11 @@ urlpatterns = [
    path("add-single-item-to-cart/<pk>/<slug>", views.add_single_item_to_cart, name="add-single-item-to-cart"),
    path("cart-summary/", CartSummaryView.as_view(), name="cart-summary"),
    path('checkout/', CheckoutView.as_view(), name='checkout-page'),
-   #path('payment/stripe/', PaymentView.as_view(), name='payment-page'),
    path('payment/', PaymentView.as_view(), name='payment'),
    path('success/', views.successMsg, name='success-page'),
    path('add-coupon/', AddCouponView.as_view(), name='add-coupon'),
    path('refund/', RequestRefundView.as_view(), name='refund-page'),
    path('refund-successful/', views.refundSuccessMsg, name='refund-success-msg'),
-   #path('<pk>/<slug>/', csrf_exempt(views.review), name='review'),
    path('<pk>/<slug>/', ReviewView.as_view(), name='review'),
-   #path('<pk>/<slug>/', CommentView.as_view(), name='review'),
    path('category/<id>/<slug>/', views.category, name='category-page'),
 ]
